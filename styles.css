@@ -1,0 +1,521 @@
+:root {
+  --netflix-bg: #141414;
+  --netflix-card: #181818;
+  --netflix-card-hover: #2f2f2f;
+  --netflix-red: #e50914;
+  --netflix-red-hover: #f40612;
+  --netflix-red-dark: #b20710;
+  --netflix-white: #ffffff;
+  --netflix-gray: #b3b3b3;
+  --netflix-gray-dark: #808080;
+  --netflix-success: #46d369;
+  --netflix-error: #e50914;
+  --font-jp: 'Noto Sans JP', sans-serif;
+  --font-kr: 'Noto Sans KR', sans-serif;
+  --radius: 4px;
+  --radius-sm: 2px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-kr);
+  background: var(--netflix-bg);
+  color: var(--netflix-white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.bg-pattern {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(229, 9, 20, 0.15) 0%, transparent 50%),
+    var(--netflix-bg);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Netflix-style header */
+.header {
+  text-align: center;
+  padding: 2.5rem 1rem 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.header h1 {
+  font-family: var(--font-jp);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--netflix-red);
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 30px rgba(229, 9, 20, 0.3);
+}
+
+.header .subtitle {
+  font-size: 1rem;
+  color: var(--netflix-gray);
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+.container {
+  flex: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.screen {
+  display: none;
+  animation: fadeIn 0.35s ease;
+}
+
+.screen.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 시작 화면 - 카드 스타일 */
+.start-card {
+  background: var(--netflix-card);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.start-card .card-icon {
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+  filter: drop-shadow(0 0 8px rgba(229, 9, 20, 0.2));
+}
+
+.start-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--netflix-white);
+}
+
+.start-card > p {
+  color: var(--netflix-gray);
+  margin-bottom: 1.75rem;
+  font-size: 0.95rem;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.option-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--netflix-bg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--netflix-gray);
+  transition: all 0.2s ease;
+}
+
+.option-item:hover {
+  background: var(--netflix-card-hover);
+  color: var(--netflix-white);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.option-item:has(input:checked) {
+  border-color: var(--netflix-red);
+  background: rgba(229, 9, 20, 0.15);
+  color: var(--netflix-white);
+}
+
+.option-label {
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--netflix-gray);
+}
+
+.option-item select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.9rem;
+  background: var(--netflix-bg);
+  color: var(--netflix-white);
+  cursor: pointer;
+}
+
+.option-item select option {
+  background: var(--netflix-card);
+  color: var(--netflix-white);
+}
+
+/* 퀴즈 화면 */
+.quiz-header {
+  margin-bottom: 1.25rem;
+}
+
+#progress-text {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--netflix-gray);
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--netflix-red);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.quiz-card {
+  background: var(--netflix-card);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.question-label {
+  font-size: 0.9rem;
+  color: var(--netflix-gray);
+  margin-bottom: 0.75rem;
+}
+
+.question-word {
+  font-family: var(--font-jp);
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--netflix-white);
+  line-height: 1.4;
+  text-shadow: 0 0 20px rgba(229, 9, 20, 0.2);
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.choice-btn {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  font-family: inherit;
+  font-size: 1rem;
+  text-align: left;
+  background: var(--netflix-bg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--netflix-white);
+  transition: all 0.2s ease;
+}
+
+.choice-btn:hover:not(:disabled) {
+  background: var(--netflix-card-hover);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.01);
+}
+
+.choice-btn:disabled {
+  cursor: default;
+}
+
+.choice-btn.correct {
+  border-color: var(--netflix-success);
+  background: rgba(70, 211, 105, 0.2);
+  color: var(--netflix-white);
+}
+
+.choice-btn.wrong {
+  border-color: var(--netflix-error);
+  background: rgba(229, 9, 20, 0.2);
+  color: var(--netflix-white);
+}
+
+#next-btn {
+  margin-top: 1.25rem;
+  width: 100%;
+}
+
+/* 버튼 - Netflix 스타일 */
+.btn {
+  display: inline-block;
+  padding: 0.9rem 1.75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: scale(1.02);
+}
+
+.btn-primary {
+  background: var(--netflix-red);
+  color: var(--netflix-white);
+}
+
+.btn-primary:hover {
+  background: var(--netflix-red-hover);
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
+}
+
+.btn-secondary {
+  background: var(--netflix-card-hover);
+  color: var(--netflix-white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* 결과 화면 */
+.result-card {
+  background: var(--netflix-card);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: center;
+}
+
+.result-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.result-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--netflix-white);
+}
+
+.result-score {
+  font-family: var(--font-jp);
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--netflix-red);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 24px rgba(229, 9, 20, 0.3);
+}
+
+.result-message {
+  font-size: 0.95rem;
+  color: var(--netflix-gray);
+  margin-bottom: 1.5rem;
+}
+
+#retry-btn {
+  width: 100%;
+}
+
+/* 컨택 버튼 */
+.btn-contact {
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: 1rem;
+  background: transparent;
+  color: var(--netflix-gray);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
+}
+
+.btn-contact:hover {
+  background: var(--netflix-card-hover);
+  color: var(--netflix-white);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: none;
+}
+
+.footer {
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--netflix-gray-dark);
+  position: relative;
+  z-index: 1;
+}
+
+/* 컨택 모달 */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+}
+
+.modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  background: var(--netflix-card);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  background: transparent;
+  border: none;
+  color: var(--netflix-gray);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.modal-close:hover {
+  color: var(--netflix-white);
+}
+
+.modal-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--netflix-white);
+}
+
+.modal-desc {
+  font-size: 0.9rem;
+  color: var(--netflix-gray);
+  margin-bottom: 1.5rem;
+}
+
+.contact-form .form-label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.contact-form .form-label span {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--netflix-gray);
+  margin-bottom: 0.35rem;
+}
+
+.contact-form .form-label input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  font-family: inherit;
+  font-size: 1rem;
+  background: var(--netflix-bg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius);
+  color: var(--netflix-white);
+}
+
+.contact-form .form-label input::placeholder {
+  color: var(--netflix-gray-dark);
+}
+
+.contact-form .form-label input:focus {
+  outline: none;
+  border-color: var(--netflix-red);
+  box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
+}
+
+.form-message {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.form-message.success {
+  color: var(--netflix-success);
+}
+
+.form-message.error {
+  color: var(--netflix-red);
+}
+
+.contact-form .btn-submit {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 520px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+  .question-word {
+    font-size: 1.65rem;
+  }
+}
